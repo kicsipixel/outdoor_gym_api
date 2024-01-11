@@ -14,10 +14,17 @@ struct GymController: RouteCollection {
         let gyms = routes.grouped("api", "v1", "gyms")
         
         gyms.get(use: index)
-        gyms.post(use: create)
+        
         gyms.get(":id", use: show)
         gyms.put(":id", use: update)
         gyms.delete(":id", use: delete)
+        
+        let basicAuthMiddleware = User.authenticator()
+        let guardAuthMiddleware = User.guardMiddleware()
+        let basicAuthGroup = gyms.grouped(basicAuthMiddleware, guardAuthMiddleware)
+        
+        // Protected route
+        basicAuthGroup.post(use: create)
     }
     
     // MARK: - Index

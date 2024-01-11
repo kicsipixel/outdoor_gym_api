@@ -37,6 +37,8 @@ public func configure(_ app: Application) async throws {
     // Migrations
     app.migrations.add(CreateGymTableMigration())
     app.migrations.add(AddCityAndCountryToGymTableMigration())
+    app.migrations.add(CreateUserTableMigration())
+    
     // Register routes
     try routes(app)
 }
