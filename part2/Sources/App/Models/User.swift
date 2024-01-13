@@ -21,6 +21,8 @@ final class User: Model, Content {
     @Field(key: "password")
     var password: String
     
+    @Children(for: \.$user) var gyms: [Gym]
+    
     init() { }
     
     init(id: UUID? = nil, email: String, password: String) {

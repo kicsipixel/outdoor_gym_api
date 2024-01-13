@@ -30,10 +30,10 @@ final class Gym: Model, Content {
     @Group(key: "coordinates")
     var coordinates: Coordinates
     
-    @Field(key: "city")
+    @OptionalField(key: "city")
     var city: String?
     
-    @Field(key: "country")
+    @OptionalField(key: "country")
     var country: String?
     
     // Initialization

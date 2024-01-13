@@ -13,28 +13,31 @@ struct GymController: RouteCollection {
     func boot(routes: Vapor.RoutesBuilder) throws {
         let gyms = routes.grouped("api", "v1", "gyms")
         
+        // Non-protected routes
         gyms.get(use: index)
-        
         gyms.get(":id", use: show)
-        gyms.put(":id", use: update)
-        gyms.delete(":id", use: delete)
         
-        let basicAuthMiddleware = User.authenticator()
+        // Middleware
+        let tokenAuthMiddleware = Token.authenticator()
         let guardAuthMiddleware = User.guardMiddleware()
-        let basicAuthGroup = gyms.grouped(basicAuthMiddleware, guardAuthMiddleware)
+        let tokenAuthGroup = gyms.grouped(tokenAuthMiddleware, guardAuthMiddleware)
         
-        // Protected route
-        basicAuthGroup.post(use: create)
+        // Protected routes
+        tokenAuthGroup.post(use: create)
+        tokenAuthGroup.put(":id", use: update)
+        tokenAuthGroup.delete(":id", use: delete)
     }
     
     // MARK: - Index
     func index(req: Request) async throws -> [Gym] {
-        try await Gym.query(on: req.db).all()
+        return  try await Gym.query(on: req.db).all()
     }
     
     // MARK: - Create
     func create(req: Request) async throws -> Gym {
-        let gym = try req.content.decode(Gym.self)
+        let user = try req.auth.require(User.self)
+        let data = try req.content.decode(CreateGymData.self)
+        let gym = try Gym(name: data.name, coordinates: data.coordinates, city: data.city, country: data.country, userID: user.requireID())
         try await gym.save(on: req.db)
         
         return gym
@@ -45,9 +48,10 @@ struct GymController: RouteCollection {
         guard let gym = try await Gym.find(req.parameters.get("id"), on: req.db) else {
             throw Abort(.notFound)
         }
-        
+                
         return gym
     }
+    
     
     // MARK: - Update
     func update(req: Request) async throws -> Gym {
@@ -55,14 +59,14 @@ struct GymController: RouteCollection {
             throw Abort(.notFound)
         }
         
-        let updatedGym = try req.content.decode(Gym.self)
+        try req.auth.require(User.self)
+        let updatedGym = try req.content.decode(CreateGymData.self)
         
         gym.name = updatedGym.name
         gym.coordinates.latitude = updatedGym.coordinates.latitude
         gym.coordinates.longitude = updatedGym.coordinates.longitude
         gym.city = updatedGym.city
         gym.country = updatedGym.country
-        
         try await gym.save(on: req.db)
         
         return gym
@@ -74,8 +78,18 @@ struct GymController: RouteCollection {
             throw Abort(.notFound)
         }
         
+        try req.auth.require(User.self)
         try await gym.delete(on: req.db)
         
         return gym
     }
 }
+
+struct CreateGymData: Content {
+    let name: String
+    let coordinates: Coordinates
+    let city: String
+    let country: String
+}
+
+

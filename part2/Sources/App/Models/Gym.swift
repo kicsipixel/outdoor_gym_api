@@ -31,20 +31,23 @@ final class Gym: Model, Content {
     @Group(key: "coordinates")
     var coordinates: Coordinates
     
-    @Field(key: "city")
+    @OptionalField(key: "city")
     var city: String?
     
-    @Field(key: "country")
+    @OptionalField(key: "country")
     var country: String?
+    
+    @Parent(key: "userID") var user: User
     
     // Initialization
     init()  { }
     
-    init(id: UUID? = nil, name:String, coordinates: Coordinates, city: String?, country: String?) {
+    init(id: UUID? = nil, name:String, coordinates: Coordinates, city: String?, country: String?, userID: User.IDValue) {
         self.id = id
         self.name = name
         self.coordinates = coordinates
         self.city = city
         self.country = country
+        self.$user.id = userID
     }
 }

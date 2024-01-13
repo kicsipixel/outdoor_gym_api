@@ -35,9 +35,10 @@ public func configure(_ app: Application) async throws {
                       as: .psql)
 
     // Migrations
+    app.migrations.add(CreateUserTableMigration())
     app.migrations.add(CreateGymTableMigration())
     app.migrations.add(AddCityAndCountryToGymTableMigration())
-    app.migrations.add(CreateUserTableMigration())
+    app.migrations.add(CreateTokenTableMigration())
     
     // Register routes
     try routes(app)

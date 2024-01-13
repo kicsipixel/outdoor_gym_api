@@ -14,6 +14,7 @@ struct CreateGymTableMigration: AsyncMigration {
             .field("name", .string, .required)
             .field("coordinates_latitude", .float, .required)
             .field("coordinates_longitude", .float, .required)
+            .field("userID", .uuid, .required, .references("users", "id"))
             .unique(on: "name") // in case you want unique names
             .create()
     }
