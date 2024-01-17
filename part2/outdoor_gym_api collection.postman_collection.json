@@ -21,10 +21,13 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "noauth"
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://127.0.0.1:8080/api/v1/gyms/",
+					"raw": "http://127.0.0.1:8080/api/v1/gyms",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -36,8 +39,7 @@
 					"path": [
 						"api",
 						"v1",
-						"gyms",
-						""
+						"gyms"
 					]
 				},
 				"description": "Postman HTTPMethod for vapor tutorial."
@@ -45,8 +47,18 @@
 			"response": []
 		},
 		{
-			"name": "Create new element",
+			"name": "Create new element - Basic authentication",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "WJEDev660uWctXz9lrxiJERZmb5j9oa3Y2VoJ73cJmk=",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [
 					{
@@ -57,7 +69,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"Bondi outdoor gym\",\n    \"coordinates\": {\n        \"latitude\": -33.891,\n        \"longitude\": 151.278\n    },\n    \"city\": \"Sydney\", \n    \"country\": \"Australia\"\n}",
+					"raw": "{\n    \"name\": \"Outdoor Gym\",\n    \"coordinates\": {\n        \"latitude\": -22.988889,\n        \"longitude\": 43.190556\n    },\n    \"city\": \"Rio de Janiero\", \n    \"country\": \"Brazil\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -122,7 +134,7 @@
 			"response": []
 		},
 		{
-			"name": "Update element",
+			"name": "Update element - Token",
 			"request": {
 				"method": "PUT",
 				"header": [
@@ -162,12 +174,95 @@
 			"response": []
 		},
 		{
-			"name": "Delete element",
+			"name": "Create new user",
 			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"example@example.com\",\n    \"password\": \"123456\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/api/v1/users",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create token - Login",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "example@example.com",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "123456",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/api/v1/users/login",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete element - Token",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "WJEDev660uWctXz9lrxiJERZmb5j9oa3Y2VoJ73cJmk=",
+							"type": "string"
+						}
+					]
+				},
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://127.0.0.1:8080/api/v1/gyms/{{id}}",
+					"raw": "http://127.0.0.1:8080/api/v1/gyms/19559833-68B1-4177-BFEE-9208AB5259FA",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -180,7 +275,50 @@
 						"api",
 						"v1",
 						"gyms",
-						"{{id}}"
+						"19559833-68B1-4177-BFEE-9208AB5259FA"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create new element - Token",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "WJEDev660uWctXz9lrxiJERZmb5j9oa3Y2VoJ73cJmk=",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Outdoor Gym\",\n    \"coordinates\": {\n        \"latitude\": -22.988889,\n        \"longitude\": 43.190556\n    },\n    \"city\": \"Rio de Janiero\", \n    \"country\": \"Brazil\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/api/v1/gyms",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"gyms"
 					]
 				}
 			},
