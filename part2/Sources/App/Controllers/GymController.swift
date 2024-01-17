@@ -26,11 +26,22 @@ struct GymController: RouteCollection {
         tokenAuthGroup.post(use: create)
         tokenAuthGroup.put(":id", use: update)
         tokenAuthGroup.delete(":id", use: delete)
+        tokenAuthGroup.get("user", use: getAllGymByUser)
     }
     
     // MARK: - Index
     func index(req: Request) async throws -> [Gym] {
-        return  try await Gym.query(on: req.db).all()
+        return try await Gym.query(on: req.db).all()
+    }
+    
+    //
+    // For testing purposes, a function, which lists the gyms created by the user
+    //
+    func getAllGymByUser(_ req: Request) async throws -> [Gym] {
+        let user = try req.auth.require(User.self)
+        let userID = try user.requireID()
+        
+        return try await Gym.query(on: req.db).filter(\.$user.$id == userID).all()
     }
     
     // MARK: - Create
