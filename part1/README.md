@@ -46,14 +46,14 @@ REMOTE_POSTGRES_PASSWORD=JKK2wHwQEG9vK5kXIJwNql2-ZGU1EEA4
 REMOTE_POSTGRES_DB=flora.db.elephantsql.com
 ```
 
-Step 1. Build
+### Step 1. Build
 
 `$ docker-compose build`
 
-Step 2. Run
+### Step 2. Run
 
 `$ docker-compose up app`
 
-Step 3. Migrate
+### Step 3. Migrate
 
 `$ docker-compose run migrate`
