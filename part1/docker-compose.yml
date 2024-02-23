@@ -30,7 +30,7 @@ services:
     environment:
       <<: *shared_environment
     env_file:
-      - .env.development
+      - .env.production
     depends_on:
       - db
     ports:
@@ -44,7 +44,7 @@ services:
     environment:
       <<: *shared_environment
     env_file:
-      - .env.development
+      - .env.production
     depends_on:
       - db
     command: ["migrate", "--yes"]
@@ -57,7 +57,7 @@ services:
     environment:
       <<: *shared_environment
     env_file:
-      - .env.development
+      - .env.production
     depends_on:
       - db
     command: ["migrate", "--revert", "--yes"]
@@ -68,6 +68,6 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data/pgdata
     env_file:
-      - .env.development
+      - .env.production
     ports:
       - '5432:5432'
