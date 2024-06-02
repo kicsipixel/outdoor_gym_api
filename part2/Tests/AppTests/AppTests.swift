@@ -2,12 +2,20 @@
 import XCTVapor
 
 final class AppTests: XCTestCase {
-    func testHelloWorld() async throws {
-        let app = try await Application.make(.testing)
-        defer { app.shutdown() }
+    var app: Application!
+    
+    override func setUp() async throws {
+        self.app = try await Application.make(.testing)
         try await configure(app)
-
-        try app.test(.GET, "hello", afterResponse: { res in
+    }
+    
+    override func tearDown() async throws {
+        try await self.app.asyncShutdown()
+        self.app = nil
+    }
+    
+    func testHelloWorld() async throws {
+        try await self.app.test(.GET, "hello", afterResponse: { res async in
             XCTAssertEqual(res.status, .ok)
             XCTAssertEqual(res.body.string, "Hello, world!")
         })
