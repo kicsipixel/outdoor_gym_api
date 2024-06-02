@@ -35,6 +35,8 @@ public func configure(_ app: Application) async throws {
     app.migrations.add(AddCityAndCountryToGymTableMigration())
     app.migrations.add(CreateTokenTableMigration())
     
+    try await app.autoMigrate()
+    
     // Register routes
     try routes(app)
 }

@@ -8,7 +8,7 @@
 import Fluent
 import Vapor
 
-final class Coordinates: Fields {
+final class Coordinates: Fields, @unchecked Sendable {
     @Field(key: "latitude")
     var latitude: Float
     
@@ -19,7 +19,7 @@ final class Coordinates: Fields {
     init() { }
 }
 
-final class Gym: Model, Content {
+final class Gym: Model, Content, @unchecked Sendable {
     static let schema: String = "gyms"
     
     @ID(key: .id)
